@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_session_form_cashback_form_inherit" model="ir.ui.view">
+        <field name="name">pos.session.form.inherit</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+           <field name="statement_ids" position="after">
+                <separator string="Summary by Cash Back" attrs="{'invisible' : [('state', '=', 'opening_control')]}"/>
+                <field name="cashback_statement_ids" attrs="{'invisible' : [('state', '=', 'opening_control')]}">
+                    <tree string="Cash Back Statements">
+                        <field name="name" />
+                        <field name="journal_id" />
+                        <field name="balance_end" />
+                        <field name="state" />
+                    </tree>
+                </field>
+            </field>
+        </field>
+    </record>
+</odoo>

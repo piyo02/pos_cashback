@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve" >
+
+    <t t-extend="PaymentScreen-Paymentmethods">
+        <t t-jquery="div[class='paymentmethods']" t-operation="after">
+            <div style="margin:16px">
+                    <div class='control-button js_custom_add_cashback ' >
+                        <i class='fa fa-tag' /> Add Cashback
+                    </div>
+                    <div class='control-button js_custom_remove_cashback ' >
+                        <i class='fa fa-tag' /> Remove Cashback
+                    </div>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="OrderWidget">
+        <t t-jquery="div[class='entry total']" t-operation="replace">
+            <div class='entry total'>
+                <span class="label">Total: </span> <span class="value">0.00 €</span>
+                <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
+                <div class='subentry cashback'><span class="cashback_name">Cashback</span>: <span class="value">0.00</span></div>
+            </div>
+        </t>
+    </t>
+
+    <!-- <t t-extend="XmlReceipt">
+        <t t-jquery="div[class='entry total']" t-operation="replace">
+            <div class='entry total'>
+                <span class="label">Total: </span> <span class="value">0.00 €</span>
+                <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
+                <div class='subentry cashback'><span class="cashback_name">Cash Back</span>: <span class="value">0.00€</span></div>
+            </div>
+        </t>
+    </t> -->
+
+    <t t-extend="PosTicket">
+         <t t-jquery="table[class='receipt-total']" t-operation="replace">
+            <table class='receipt-total'>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_without_tax())"/>
+                    </td>
+                </tr>
+                <t t-foreach="order.get_tax_details()" t-as="taxdetail">
+                    <tr>
+                        <td><t t-esc="taxdetail.name" /></td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(taxdetail.amount)" />
+                        </td>
+                    </tr>
+                </t>
+                <tr>
+                    <t t-if="order.get_total_discount() > 0">
+                        <td>Discount:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_discount())"/>
+                        </td>
+                    </t>
+                </tr>
+                <tr class="emph">
+                    <td>Total:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_with_tax() + order.get_cashback_amount() )"/>
+                    </td>
+                </tr>
+            </table>
+        </t>
+
+        <t t-jquery="table[class='receipt-change']" t-operation="after">
+            <br />
+            <table class='receipt-cashback'>
+                <tr><td>Cashback:</td><td class="pos-right-align">
+                    <t t-esc="widget.format_currency(order.get_cashback_amount())"/>
+                    </td></tr>
+                <tr >
+                    <td>Total After Cashback:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_with_tax() )"/>
+                    </td>
+                </tr>
+            </table>
+        </t>
+    </t>
+  
+
+    <t t-name="PaymentScreen-PaymentCashback2">
+        <table class='paymentlines cashback-lines'>
+            <thead>
+                <tr class='label'>
+                    <th><t t-esc='name' /></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr class='paymentline selected'>
+                    <td class='col-change highlight js_cashback_amount' > 
+                        <t t-esc='widget.format_currency_no_symbol(cashback)' />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </t>
+</templates>

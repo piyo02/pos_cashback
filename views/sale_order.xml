@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_cashback_form_inherit" model="ir.ui.view">
+        <field name="name">sale.agent.order.inherit.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="cashback_id" />
+            </field>
+             <field name="amount_total" position="after">
+                <field name="cashback_total"
+                       widget="monetary"
+                       options="{'currency_field': 'currency_id'}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

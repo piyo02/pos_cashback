@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+cashback_acces_right_all,cashback_acces_right_all,model_pos_cashback,,1,1,1,1
+cashback_statement_acces_right_all,cashback_statement_acces_right_all,model_pos_cashback_statement,,1,1,1,1
+pos_cashback_statement_line_acces_right_all,pos_cashback_statement_line_acces_right_all,model_pos_cashback_statement_line,,1,1,1,1

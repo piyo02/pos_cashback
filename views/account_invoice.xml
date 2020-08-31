@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_invoice_form_cashback" model="ir.ui.view">
+        <field name="name">account.invoice.form.cashback</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="cashback_id" />
+            </field>
+             <field name="amount_total" position="after">
+                <field name="cashback_total"
+                       widget="monetary"
+                       options="{'currency_field': 'currency_id'}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

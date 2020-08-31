@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pos_cashback_list" model="ir.ui.view">
+            <field name="name">cashback_list</field>
+            <field name="model">pos.cashback</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Cash Back List" >
+                    <field name="name" />
+                    <field name="minimal_amount" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="pos_cashback_form" model="ir.ui.view">
+			<field name="name">cashback_form</field>
+			<field name="model">pos.cashback</field>
+			<field name="type">form</field>
+			<field name="priority" eval="8"/>
+			<field name="arch" type="xml">
+				<form string="Cashback Form" version="7.0">
+					<sheet>
+                         <group>
+                            <field name="name" />
+                            <field name="journal_id" />
+                            <field name="account_id" />
+                            <field name="minimal_amount" />
+                            <field name="cashback_pc" />
+                            <field name="state" />
+                        </group>
+					</sheet>
+				</form>
+
+			</field>
+		</record>
+    </data>
+</odoo>

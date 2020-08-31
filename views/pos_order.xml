@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_order_cashback_form_inherit" model="ir.ui.view">
+        <field name="name">pos.order.form.inherit</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+           <field name="amount_total" position="after">
+                <field name="amount_cashback" widget="monetary" />
+                <div class="oe_subtotal_footer_separator oe_inline">
+                    <label for="amount_total_with_cashback" />
+                </div>
+                <field name="amount_total_with_cashback" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+            </field>
+            <field name="statement_ids" position="after">
+                <field name="cashback_statement_ids" colspan="4" nolabel="1">
+                    <tree editable="bottom" string="Cash Back Statement lines">
+                        <field name="journal_id"/>
+                        <field name="cashback_statement_id"/>
+                        <field name="amount"/>
+                    </tree>
+                </field>
+            </field>
+        </field>
+    </record>
+</odoo>

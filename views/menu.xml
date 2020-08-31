@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.actions.act_window" id="action_pos_cash_back">
+        <field name="name">Cash Back</field>
+        <field name="res_model">pos.cashback</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Cash Back"
+            id="menu_pos_cashback"
+            action="action_pos_cash_back"
+            parent="point_of_sale.menu_point_config_product" 
+              />
+</odoo>
