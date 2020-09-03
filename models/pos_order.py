@@ -45,7 +45,8 @@ class PosOrder(models.Model):
                 amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines))
 
                 if( amount_untaxed >= order.cashback_id.minimal_amount ):
-                    order.amount_cashback = amount_untaxed * order.cashback_id.cashback_pc / 100
+                    # order.amount_cashback = amount_untaxed * order.cashback_id.cashback_pc / 100 partner_id.cashback_pc
+                    order.amount_cashback = amount_untaxed
                 
             order.amount_total_with_cashback = order.amount_total - order.amount_cashback
 

@@ -28,7 +28,7 @@
                             <field name="journal_id" />
                             <field name="account_id" />
                             <field name="minimal_amount" />
-                            <field name="cashback_pc" />
+                            <!-- <field name="cashback_pc" /> -->
                             <field name="state" />
                         </group>
 					</sheet>

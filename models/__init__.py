@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import account_move
+from . import partner
 from . import pos_cashback
 from . import pos_cashback_statement
 from . import pos_config

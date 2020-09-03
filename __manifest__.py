@@ -14,6 +14,7 @@
     'data': [
         'views/menu.xml',
         'views/cashback.xml',
+        'views/partner.xml',
         'views/pos_cashback_templates.xml',
         'views/pos_config.xml',
         'views/pos_order.xml',

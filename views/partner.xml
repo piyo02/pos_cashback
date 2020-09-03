@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--  additional sales canvas field -->
+    <record id="view_partner_form_member" model="ir.ui.view">
+        <field name="name">res.partner.form.member</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="priority" eval="18"/>
+        <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page string="Cashback">
+                    <group>
+                        <field name="member" string="Member" />
+                        <field name="card_number" string="Card Number" />
+                        <field name="cashback_pc" string="Cash Back Percentage" />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- action filter sales canvas list -->
+    <record id="view_res_partner_filter" model="ir.ui.view">
+       <field name="name">res.partner.select</field>
+       <field name="model">res.partner</field>
+       <field name="inherit_id" ref="base.view_res_partner_filter"/>
+       <field name="arch" type="xml">
+           <filter name="supplier" position="after">
+               <filter string="Members" name="member" domain="[('member', '=', 1)]" help="Customer Member"/>
+           </filter>
+        </field>
+   </record>
+
+</odoo>

@@ -24,16 +24,6 @@
         </t>
     </t>
 
-    <!-- <t t-extend="XmlReceipt">
-        <t t-jquery="div[class='entry total']" t-operation="replace">
-            <div class='entry total'>
-                <span class="label">Total: </span> <span class="value">0.00 €</span>
-                <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
-                <div class='subentry cashback'><span class="cashback_name">Cash Back</span>: <span class="value">0.00€</span></div>
-            </div>
-        </t>
-    </t> -->
-
     <t t-extend="PosTicket">
          <t t-jquery="table[class='receipt-total']" t-operation="replace">
             <table class='receipt-total'>
