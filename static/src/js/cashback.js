@@ -198,7 +198,6 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
                         self.$('.js_custom_add_cashback').addClass('oe_hidden');
                         self.$('.js_custom_remove_cashback').removeClass('oe_hidden');
 
-                        // self.render_cashback();
                         self.render_paymentlines();
                     });
 
@@ -216,7 +215,6 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
                         self.$('.js_custom_remove_cashback').addClass('oe_hidden');
                         self.$('.js_custom_add_cashback').removeClass('oe_hidden');
 
-                        // self.render_cashback();
                         self.render_paymentlines();
                     });
                 }
@@ -332,18 +330,19 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
             this._super();
 
             var order = this.pos.get_order();
-            let query;
             let search_timeout_for_cashback = null;
 
-            this.$('.searchbox input').on('keydown', function(event) {
+            // this.$('.search-barcode input').on('change', 'input', function(event) {
+            this.$('.search-barcode input').on('keydown', function(event) {
                 clearTimeout(search_timeout_for_cashback);
-                const searchbox_cashback = this;
+                const searchbox = this;
+                // console.log(event.type);
 
                 search_timeout_for_cashback = setTimeout(function(){
-                    const query = searchbox_cashback.value.split('-')[1];
-                    const isFinish = searchbox_cashback.value.split('-')[2] || 0;
+                    const query = searchbox.value;
+                    const isFinish = searchbox.value.length;
 
-                    self.perform_search_for_cashback(query, isFinish);
+                    self.perform_search_for_cashback(query, (isFinish == 8));
                 },70);
             });
 

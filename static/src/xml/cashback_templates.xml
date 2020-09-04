@@ -24,6 +24,15 @@
         </t>
     </t>
 
+    <t t-extend="ClientListScreenWidget">
+        <t t-jquery="span[class='button new-customer']" t-operation="replace">
+            <span class='searchbox search-barcode' style="margin-left: 95px;">
+                <input placeholder='Search Barcode' />
+                <span class='search-clear'></span>
+            </span>
+        </t>
+    </t>
+
     <t t-extend="PosTicket">
          <t t-jquery="table[class='receipt-total']" t-operation="replace">
             <table class='receipt-total'>
@@ -62,7 +71,7 @@
             <br />
             <table class='receipt-cashback'>
                 <tr><td>Cashback:</td><td class="pos-right-align">
-                    <t t-esc="widget.format_currency(order.get_cashback_amount())"/>
+                    <t t-esc="widget.format_currency(order.get_cashback_amount(order.attributes.client.id))"/>
                     </td></tr>
                 <tr >
                     <td>Total After Cashback:</td>
