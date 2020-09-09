@@ -332,18 +332,20 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
             var order = this.pos.get_order();
             let search_timeout_for_cashback = null;
 
-            // this.$('.search-barcode input').on('change', 'input', function(event) {
             this.$('.search-barcode input').on('keydown', function(event) {
-                clearTimeout(search_timeout_for_cashback);
-                const searchbox = this;
-                // console.log(event.type);
+                if(event.which === 13){
+                    order.isMember = true;
+                    
+                    clearTimeout(search_timeout_for_cashback);
+                    const searchbox = this;
 
-                search_timeout_for_cashback = setTimeout(function(){
-                    const query = searchbox.value;
-                    const isFinish = searchbox.value.length;
+                    search_timeout_for_cashback = setTimeout(function(){
+                        const query = searchbox.value;
+                        const isFinish = searchbox.value.length;
 
-                    self.perform_search_for_cashback(query, (isFinish == 8));
-                },70);
+                        self.perform_search_for_cashback(query, (isFinish == 9 && query[0] == '%'));
+                    },70);
+                }
             });
 
             this.$('.next').click(function(){
