@@ -13,7 +13,7 @@
                 <page string="Cashback">
                     <group>
                         <field name="member" string="Member" />
-                        <field name="card_number" string="Card Number" readonly="1" />
+                        <field name="card_number" string="Card Number" /> <!-- readonly="1" -->
                         <field name="cashback_pc" string="Cash Back Percentage" />
                     </group>
                 </page>

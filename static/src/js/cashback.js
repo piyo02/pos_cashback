@@ -343,7 +343,7 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
                         const query = searchbox.value;
                         const isFinish = searchbox.value.length;
 
-                        self.perform_search_for_cashback(query, (isFinish == 9 && query[0] == '%'));
+                        self.perform_search_for_cashback(query, (isFinish == 8 && query[0] == '%'));
                     },70);
                 }
             });
