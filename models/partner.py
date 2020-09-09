@@ -19,7 +19,7 @@ class ResPartner(models.Model):
         string="Member",
         help="Check this field if the partner is a member.")
     card_number = fields.Char(string="Card Number") #, readonly=True
-    barcode = fields.Char(string="Barcode") #, readonly=True
+    barcode = fields.Char(string="Barcode", readonly=True) #
 
     @api.multi
     @api.onchange('member')
