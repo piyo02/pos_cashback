@@ -76,39 +76,34 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
         },
         export_as_JSON: function() {
             var order               = _super_order.export_as_JSON.call(this);
-            const pos_order = this.pos.get_order();
-            let partner_id = 0;
-            if(pos_order !== null)
-                partner_id = (pos_order.attributes.client !== null) ? pos_order.attributes.client.id : 0;
             
             order.has_cashback      = this.has_cashback;
-            order.cashback_amount   = this.get_cashback_amount(partner_id);
+            order.cashback_amount   = this.get_cashback_amount();
             return order;
         },
 
         export_for_printing: function(){
-            const order = this.pos.get_order();
-            const partner_id = (order !== null) ? order.attributes.client.id : 0;
-            
             var receipt                    = _super_order.export_for_printing.call(this);
-            receipt.cashback_amount        = this.get_cashback_amount(partner_id);
+            
+            receipt.cashback_amount        = this.get_cashback_amount();
             receipt.total_with_tax         = receipt.total_with_tax + receipt.cashback_amount;
             receipt.total_after_cashback   = receipt.total_with_tax - receipt.cashback_amount;
             
             return receipt;
         },
         get_total_with_tax: function() {
-            const order = this.pos.get_order();
-            let partner_id = 0;
-            if(order !== null)
-                partner_id = (order.attributes.client !== null) ? order.attributes.client.id : 0;
-            
-            return this.get_total_without_tax() + this.get_total_tax() - this.get_cashback_amount(partner_id);
+            return this.get_total_without_tax() + this.get_total_tax() - this.get_cashback_amount();
         },
-        get_cashback_amount: function(partner_id = 0) {
+        get_cashback_amount: function() {
             var cashback_amount = 0.0;
             var amount = this.get_total_without_tax();
             var order = this.pos.get_order();
+
+            let partner_id = 0;
+            if(order !== null)
+                if(order.attributes.client !== null)
+                    partner_id = order.attributes.client.id;
+
             const cashback = this.filterIt(this.partners_cashback, partner_id);
             const isMember = (cashback[0] !== undefined) ? cashback[0].member : false;
             
@@ -312,7 +307,7 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
 
             if( this.pos.cashback )
             {
-                var cashback  = order ? order.get_cashback_amount(partner_id) * (-1) : 0;
+                var cashback  = order ? order.get_cashback_amount() * (-1) : 0;
                 this.el.querySelector('.summary .total .cashback .value').textContent = this.format_currency(cashback);
                 this.el.querySelector('.summary .total .cashback .cashback_name').textContent = this.pos.cashback.name;
             }
@@ -330,46 +325,18 @@ odoo.define('pos_cashback.pos_cashback', function (require) {
             this._super();
 
             var order = this.pos.get_order();
-            let search_timeout_for_cashback = null;
 
-            this.$('.search-barcode input').on('keydown', function(event) {
-                if(event.which === 13){
+            this.$('.searchbox input').on('keypress', function(event) {
+                var searchbox = this;
+
+                if(event.which === 13 && searchbox.value[0] === '%' && searchbox.value.length === 9){
                     order.isMember = true;
-                    
-                    clearTimeout(search_timeout_for_cashback);
-                    const searchbox = this;
-
-                    search_timeout_for_cashback = setTimeout(function(){
-                        const query = searchbox.value;
-                        const isFinish = searchbox.value.length;
-
-                        self.perform_search_for_cashback(query, (isFinish == 8 && query[0] == '%'));
-                    },70);
                 }
             });
 
             this.$('.next').click(function(){
                 order.isMember = false;
             });
-        },
-        perform_search_for_cashback: function(query, isFinish){
-            let customers;
-            if(query){
-                customers = this.pos.db.search_partner(query);
-                if ( isFinish && customers.length > 0 ){
-                    this.new_client = customers[0];
-                    this.save_changes_for_cashback();
-                    this.gui.back();
-                }
-            }
-        },
-
-        save_changes_for_cashback: function(){
-            var self = this;
-            var order = this.pos.get_order();
-            order.isMember = true;
-
-            order.set_client(this.new_client);
         },
 
         

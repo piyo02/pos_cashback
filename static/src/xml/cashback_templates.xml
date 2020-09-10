@@ -24,15 +24,6 @@
         </t>
     </t>
 
-    <t t-extend="ClientListScreenWidget">
-        <t t-jquery="span[class='button new-customer']" t-operation="replace">
-            <span class='searchbox search-barcode' style="margin-left: 95px;">
-                <input placeholder='Search Barcode' />
-                <span class='search-clear'></span>
-            </span>
-        </t>
-    </t>
-
     <t t-extend="PosTicket">
          <t t-jquery="table[class='receipt-total']" t-operation="replace">
             <table class='receipt-total'>
