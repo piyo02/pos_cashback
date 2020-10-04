@@ -62,7 +62,7 @@
             <br />
             <table class='receipt-cashback'>
                 <tr><td>Cashback:</td><td class="pos-right-align">
-                    <t t-esc="widget.format_currency(order.get_cashback_amount(order.attributes.client.id))"/>
+                    <t t-esc="widget.format_currency(order.get_cashback_amount())"/>
                     </td></tr>
                 <tr >
                     <td>Total After Cashback:</td>
