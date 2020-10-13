@@ -1,0 +1,187 @@
+<t t-name="SimpleXmlReceipt">
+        <receipt align='center' width='45' value-thousands-separator='' style="width: 220px" >
+
+            <!-- HEADER -->
+            <right>
+                <t t-esc="order.formatted_validation_date"/>
+            </right>
+            <center>
+                <t t-esc="widget.pos.company.name"/>
+            </center>
+            <center>
+                Jl. Piere Tendea No.-
+                (DEPAN PADANG GOLF) Kendari.
+            </center>
+            <center>
+                0822 9209 7090
+            </center>
+            <left>Waiter: <t t-esc='order.get_last_orderline_user_name()' /></left>
+            <right>
+                <t t-esc="order.name"/>
+            </right>
+            <center>=================================</center>
+
+            <!-- ORDERLINES -->
+            <div class='orderlines' line-ratio='0.6'>
+                <t t-foreach='receipt.orderlines' t-as='line'>
+                    <t t-set='simple' t-value='line.discount === 0 and line.unit_name === "Unit(s)" and line.quantity === 1' />
+                    <t t-if='simple'>
+                        <line>
+                            <left><t t-esc='line.product_name_wrapped[0]' /></left>
+                            <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='line.price_display' /></value></right>
+                        </line>
+                        <t t-set="second_product_name" t-value="line.second_product_name"/>
+                        <t t-if="pos.config.show_second_product_name_in_receipt and second_product_name">
+                            <line>
+                                <left>(<t t-esc='second_product_name' />)</left>
+                            </line>
+                        </t>
+                        <t t-call="XmlReceiptWrappedProductNameLines"/>
+                    </t>
+                    <t t-if='!simple'>
+                        <line><left><t t-esc='line.product_name_wrapped[0]' /></left></line>
+                        <t t-set="second_product_name" t-value="line.second_product_name"/>
+                        <t t-if="pos.config.show_second_product_name_in_receipt and second_product_name">
+                            <line>
+                                <left>(<t t-esc='second_product_name' />)</left>
+                            </line>
+                        </t>
+                        <t t-call="XmlReceiptWrappedProductNameLines"/>
+                        <t t-if='line.discount !== 0 and pos.config.show_discount_in_receipt'>
+                            <line><left>Discount: <t t-esc='line.discount' />%</left></line>
+                        </t>
+                        <line>
+                            <left>
+                                <value t-att-value-decimals='pos.dp["Product Unit of Measure"]' value-autoint='on'>
+                                    <t t-esc='line.quantity' />
+                                </value>
+                                <t t-if='line.unit_name !== "Unit(s)"'>
+                                    <t t-esc='line.unit_name' />
+                                </t>
+                                x
+                                <value t-att-value-decimals='pos.dp["Product Price"]'>
+                                    <t t-esc='line.price' />
+                                </value>
+                            </left>
+                            <right>
+                                <value t-att-value-decimals='pos.currency.decimals'><t t-esc='line.price_display' /></value>
+                            </right>
+                        </line>
+                    </t>
+                </t>
+            </div>
+            <center>=================================</center>
+
+
+            <!-- SUBTOTAL WITHOUT TAXES AND DICOUNT-->
+            <line>
+                <left>Subtotal:</left>
+                <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc="receipt.subtotal + receipt.total_discount" /></value></right>
+            </line>
+
+            <!-- TAXES -->
+            <t t-foreach='receipt.tax_details' t-as='tax'>
+                <line>
+                    <left><t t-esc='tax.name' /></left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='tax.amount' /></value></right>
+                </line>
+            </t>
+
+            <!-- TOTAL WITHOUT DISCOUNT AND WITH TAXES -->
+            <line>
+                <left>Total:</left>
+                <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_with_tax + receipt.total_discount' /></value></right>
+            </line>
+
+
+            <!-- DISCOUNT PROGRAM NAME -->
+            <t t-if="order.discount_program_name">
+                <line>
+                    <left>Discount Program:</left>
+                    <right><t t-esc="order.discount_program_name"/></right>
+                </line>
+            </t>
+
+            <!-- DISCOUNT TOTAL -->
+            <t t-if="receipt.total_discount">
+                <line>
+                    <left>Discount Total:</left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_discount'/></value></right>
+                </line>
+            </t>
+
+            <!-- PAYMENTS -->
+            <t t-foreach='paymentlines' t-as='line'>
+                <line>
+                    <left><t t-esc='line.name' /></left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='line.get_amount()'/></value></right>
+                </line>
+            </t>
+
+            <!-- DEBT AND CREDITS -->
+            <t t-set="partner" t-value="order.get_client()"/>
+            <t t-if="receipt.debt_before or receipt.debt_after or (partner and partner.debt)">
+                <t t-set="debt_sign" t-value="receipt.debt_type=='debt' and 1 or -1"/>
+                <t t-if="receipt.debt_type=='debt'">
+                    <line>
+                        <left>Debts Total:</left>
+                        <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='debt_sign * receipt.debt_after'/></value></right>
+                    </line>
+                    <line>
+                        <left>Max Debts Balance:</left>
+                        <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='debt_sign * (partner.debt_limit - debt_sign * receipt.debt_after)'/></value></right>
+                    </line>
+                </t>
+                <t t-if="receipt.debt_type=='credit'">
+                    <line>
+                        <left>Credits Balance:</left>
+                        <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='debt_sign * receipt.debt_after'/></value></right>
+                    </line>
+                </t>
+            </t>
+
+            <!-- CHANGE -->
+            <line>
+                <left>Change</left>
+                <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.change' /></value></right>
+            </line>
+
+            <!-- EXTRA PAYMENT INFO -->
+            <t t-if='taxincluded'>
+                <t t-foreach='receipt.tax_details' t-as='tax'>
+                    <line>
+                        <left><t t-esc='tax.name' /></left>
+                        <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='tax.amount' /></value></right>
+                    </line>
+                </t>
+                <line>
+                    <left>Total Taxes: </left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_tax'/></value></right>
+                </line>
+            </t>
+            <br/>
+
+            <!-- CASHBACK -->
+            <table class='receipt-cashback'>
+                <tr><td>Cashback:</td><td class="pos-right-align">
+                    <t t-esc="widget.format_currency(order.get_cashback_amount())"/>
+                    </td></tr>
+                <tr >
+                    <td>Total After Cashback:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_with_tax() )"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <!-- FOOTER -->
+            <div>
+                <t t-if="receipt.footer">
+                    <t t-esc="receipt.footer" />
+                </t>
+            </div>
+            <div class='after-footer' />
+
+        </receipt>
+    </t>
